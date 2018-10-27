@@ -1,0 +1,84 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'erb'
+require 'optparse'
+require_relative '../lib/facebook'
+
+options = {}
+opts_parser = OptionParser.new do |opts|
+  opts.on('-o', '--output-dir DIRECTORY', 'output directory to place mkdocs site into') do |v|
+    options[:output_dir] = v
+  end
+end
+opts_parser.parse!
+raise '--output-dir is required' unless options[:output_dir]
+
+facebook = Facebook.new(
+  username: ENV.fetch('FACEBOOK_USERNAME'),
+  password: ENV.fetch('FACEBOOK_PASSWORD')
+)
+
+facebook.login!
+
+Group = Struct.new(:id, :name)
+groups_by_city = {
+  Denver: [
+    Group.new('lookoutmountainrunners', 'Golden Mountain Runners'),
+    Group.new('BPRunCO', 'Berkeley Park Running Company')
+  ],
+  Boulder: [
+    Group.new('BoulderRunningCompany', 'Boulder Running Company')
+  ]
+}
+
+output_dir = options[:output_dir]
+system("rm -Rf #{output_dir}")
+system("mkdocs new --verbose #{output_dir}")
+
+Dir.chdir(output_dir) do
+  groups_by_city.each_with_index do |(city, groups), index|
+    events_by_groups = Hash[groups.map do |group|
+      [group, facebook.events(id: group.id)]
+    end]
+
+    filename = "#{city.to_s.downcase}.md"
+    filename = 'index.md' if index == 0
+    File.write(File.join('docs', filename), ERB.new(<<~MARKDOWN).result(binding))
+      ---
+      title: <%= city %>
+      date: #{Time.now.to_date}
+      authors:
+      - JT
+      ---
+      # <%= city %> Running Clubs
+      <% events_by_groups.each do |group, events| %>
+      ## <%= group.name %>
+       <% events.each do |event| %>
+      ### <a href="<%= event[:link] %>"><%= event[:title] %></a>
+       Start: <%= event[:date] %>
+
+       <%= event[:description] %>
+      <% end %>
+      <% end %>
+    MARKDOWN
+  end
+
+  config = YAML.load_file('mkdocs.yml')
+  config['site_name'] = 'Running Clubs'
+  config['theme'] = 'material'
+  config['strict'] = true
+  config['repo_url'] = 'https://github.com/jtarchie/running-clubs'
+  File.write('mkdocs.yml', YAML.dump(config))
+  system('mkdocs build')
+  Dir.chdir('site') do
+    File.write('CNAME', 'denverrunners.com')
+
+    system('git init')
+    system('git remote add origin git@github.com:jtarchie/running-clubs.git')
+    system('git add -A')
+    system('git co -b gh-pages')
+    system('git commit -m "updated"')
+    system('git push origin gh-pages -f')
+  end
+end
