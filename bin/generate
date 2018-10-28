@@ -81,6 +81,7 @@ Dir.chdir(output_dir) do
       'accent' => 'light blue',
     }
   }
+  config['edit_uri'] = nil
   config['strict'] = true
   config['repo_url'] = 'https://github.com/jtarchie/running-clubs'
   File.write('mkdocs.yml', YAML.dump(config))
