@@ -38,6 +38,7 @@ groups_by_city = {
 output_dir = options[:output_dir]
 system("rm -Rf #{output_dir}")
 system("mkdocs new --verbose #{output_dir}")
+system("cp assets/favicon.ico #{File.join(output_dir, 'docs')}")
 
 Dir.chdir(output_dir) do
   groups_by_city.each_with_index do |(city, groups), index|
@@ -71,7 +72,11 @@ Dir.chdir(output_dir) do
 
   config = YAML.load_file('mkdocs.yml')
   config['site_name'] = 'Running Clubs'
-  config['theme'] = 'material'
+  config['theme'] = {
+    'name' => 'material',
+    'favicon' => '/favicon.ico',
+    'logo' => '/favicon.ico'
+  }
   config['strict'] = true
   config['repo_url'] = 'https://github.com/jtarchie/running-clubs'
   File.write('mkdocs.yml', YAML.dump(config))
