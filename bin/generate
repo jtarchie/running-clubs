@@ -75,7 +75,11 @@ Dir.chdir(output_dir) do
   config['theme'] = {
     'name' => 'material',
     'favicon' => '/favicon.ico',
-    'logo' => '/favicon.ico'
+    'logo' => '/favicon.ico',
+    'palette' => {
+      'primary' => 'blue',
+      'accent' => 'light blue',
+    }
   }
   config['strict'] = true
   config['repo_url'] = 'https://github.com/jtarchie/running-clubs'
