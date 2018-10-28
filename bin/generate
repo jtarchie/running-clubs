@@ -3,6 +3,7 @@
 
 require 'erb'
 require 'optparse'
+require 'uri'
 require_relative '../lib/facebook'
 
 options = {}
@@ -24,8 +25,10 @@ facebook.login!
 Group = Struct.new(:id, :name)
 groups_by_city = {
   Denver: [
+    Group.new('BPRunCO', 'Berkeley Park Running Company'),
+    Group.new('Dirty30Running', 'Dirty 30 Running'),
+    Group.new('RunnersRoostLakewood', 'Runners Roost Lakewood'),
     Group.new('lookoutmountainrunners', 'Golden Mountain Runners'),
-    Group.new('BPRunCO', 'Berkeley Park Running Company')
   ],
   Boulder: [
     Group.new('BoulderRunningCompany', 'Boulder Running Company')
@@ -58,6 +61,8 @@ Dir.chdir(output_dir) do
       ### <a href="<%= event[:link] %>"><%= event[:title] %></a>
        Start: <%= event[:date] %>
 
+       Location: [<%= event[:location] %>](https://www.google.com/maps?q=<%= URI.escape(event[:location]) %>)
+
        <%= event[:description] %>
       <% end %>
       <% end %>
@@ -70,7 +75,7 @@ Dir.chdir(output_dir) do
   config['strict'] = true
   config['repo_url'] = 'https://github.com/jtarchie/running-clubs'
   File.write('mkdocs.yml', YAML.dump(config))
-  system('mkdocs build')
+  raise 'Cannot build' unless system('mkdocs build')
   Dir.chdir('site') do
     File.write('CNAME', 'denverrunners.com')
 
