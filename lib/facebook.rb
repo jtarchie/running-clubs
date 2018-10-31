@@ -47,7 +47,7 @@ class Facebook
 
     page.has_no_css?('#page-events-tab-loading-spinner', wait: 10)
 
-    upcoming_events = page.all('#upcoming_events_card a[href*="ref_page_id"]')
+    upcoming_events = page.all('#upcoming_events_card a[href*="ref_page_id"], [id*="pagelet_calendar_upcoming"] a[href*="/events"]')
     upcoming_events = upcoming_events.select do |link|
       (link[:href] || '').include?('/events')
     end

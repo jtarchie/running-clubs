@@ -16,9 +16,18 @@ RSpec.describe 'Getting events from Facebook' do
     expect(facebook.logged_in?).to be_truthy
   end
 
-  it 'can find a list of events' do
-    facebook.login!
-    expect(facebook.events(id: 'TheChurchNightclub', limit: 1).size).to eq 1
+  context 'with a page' do
+    it 'can find a list of events' do
+      facebook.login!
+      expect(facebook.events(id: 'TheChurchNightclub', limit: 1).size).to eq 1
+    end
+  end
+
+  context 'with a group' do
+    it 'can find a list of events' do
+      facebook.login!
+      expect(facebook.events(id: '918204988192108', limit: 1).size).to eq 1
+    end
   end
 
   it 'can find an events information' do
