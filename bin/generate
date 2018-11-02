@@ -26,15 +26,18 @@ Group = Struct.new(:id, :name)
 groups_by_city = {
   Denver: [
     Group.new('112582942107236', 'Foothills Running and Cycling Club'),
+    Group.new('124886367564642', 'Highland Tap and Burger Run Club'),
     Group.new('1528173973929011', 'Runners Roost Stapleton'),
+    Group.new('1743154215930862', 'Arvada Runners'),
     Group.new('201896876473', 'Boulder Running Company @ Greenwood Village'),
     Group.new('305158679071', 'Runners Roost Lone Tree'),
     Group.new('338344882975485', 'Boulder Running Company @ Cherry Creek'),
+    Group.new('918204988192108', 'Denver Trail Runners'),
     Group.new('BPRunCO', 'Berkeley Park Running Company'),
     Group.new('Dirty30Running', 'Dirty 30 Running'),
     Group.new('RunnersRoostCO', 'Runners Roost'),
     Group.new('RunnersRoostLakewood', 'Runners Roost Lakewood'),
-    Group.new('lookoutmountainrunners', 'Golden Mountain Runners')
+    Group.new('lookoutmountainrunners', 'Golden Mountain Runners'),
   ],
   Boulder: [
     Group.new('BoulderRunningCompany', 'Boulder Running Company')
@@ -46,10 +49,15 @@ system("rm -Rf #{output_dir}")
 system("mkdocs new --verbose #{output_dir}")
 system("cp assets/favicon.ico #{File.join(output_dir, 'docs')}")
 
+cutoff_time = Time.now + 30 * 24 * 3600
+
 Dir.chdir(output_dir) do
   groups_by_city.each_with_index do |(city, groups), index|
     events_by_groups = Hash[groups.map do |group|
-      [group, facebook.events(id: group.id)]
+      events = facebook.events(id: group.id).select do |event|
+        event[:date] && event[:date] < cutoff_time
+      end
+      [group, events]
     end]
 
     filename = "#{city.to_s.downcase}.md"

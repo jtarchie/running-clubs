@@ -50,14 +50,14 @@ class Facebook
     upcoming_events = page.all('#upcoming_events_card a[href*="ref_page_id"], [id*="pagelet_calendar_upcoming"] a[href*="/events"]')
     upcoming_events = upcoming_events.select do |link|
       (link[:href] || '').include?('/events')
-    end
+    end.map do |link|
+      url = URI.parse(link[:href])
+      "#{url.scheme}://#{url.host}#{url.path}"
+    end.compact.uniq
     upcoming_events = upcoming_events[0..limit - 1] if limit > 0
 
     logger.info "found #{upcoming_events.size} events"
     upcoming_events.map do |link|
-      url = URI.parse(link[:href])
-      "#{url.scheme}://#{url.host}#{url.path}"
-    end.compact.map do |link|
       event(link: link)
     end
   end
