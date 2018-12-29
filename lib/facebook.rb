@@ -8,9 +8,10 @@ require 'logger'
 class Facebook
   include Capybara::DSL
 
-  def initialize(username:, password:)
+  def initialize(username:, password:, cache: false)
     @username = username
     @password = password
+    @cache    = cache
     Capybara.current_driver = :selenium_chrome_headless
   end
 
@@ -42,6 +43,9 @@ class Facebook
 
   def events(id:, limit: 0)
     logger.info "visiting page https://facebook.com/#{id}"
+    file = File.join('/tmp', [id, Time.now.to_date.to_s].join('-'))
+    return Marshal.load(File.read(file)) if @cache && File.exist?(file)
+
     visit "https://facebook.com/#{id}"
     click_on 'Events'
 
@@ -57,13 +61,18 @@ class Facebook
     upcoming_events = upcoming_events[0..limit - 1] if limit > 0
 
     logger.info "found #{upcoming_events.size} events"
-    upcoming_events.map do |link|
+    payload = upcoming_events.map do |link|
       event(link: link)
     end
+    File.write(file, Marshal.dump(payload))
+    payload
   end
 
   def event(link:)
     logger.info "visiting event site #{link}"
+    file = File.join('/tmp', [Digest::MD5.hexdigest(link), Time.now.to_date.to_s].join('-'))
+    return Marshal.load(File.read(file)) if @cache && File.exist?(file)
+
     visit link
     date = begin
              time = page.find('#event_time_info div[content]').text
@@ -97,13 +106,15 @@ class Facebook
                  logger.error 'could not find a location'
                  nil
                end
-    {
+    payload = {
       date: date,
       title: title,
       description: description,
       location: location,
       link: link
     }
+    File.write(file, Marshal.dump(payload))
+    payload
   end
 
   private
