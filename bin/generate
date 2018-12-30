@@ -86,35 +86,65 @@ __END__
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="/favicon.ico">
+  <style>
+    .icon-co {
+      background-image: url(/favicon.ico);
+    }
+  </style>
 </head>
 <body>
   <header class="row">
-    <a href="/" class="button logo">Running Clubs</a>
+    <a href="/" class="button logo"><span class="icon-co"></span>Running Clubs</a>
     <a href="#about" class="button">About</a>
     <% events_by_city.each do |city, _| %>
     <a href="#<%= city.to_s.downcase %>" class="button"><%= city %></a>
     <% end %>
+    <a href="mailto:jtarchie+runningclubs@gmail.com" class="button">Contact</a>
   </header>
   <div class="container">
     <div class="col-sm-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-      <h1 id="about">About</h1>
-      <p>Boulder has a large running community. It is daunting to navigate all the meetups and events.</p>
-      <p>Boulder Runners aggregates running groups, stores, etc. for convenience. Hoping to help grow the community.</p>
+      <div class="card fluid">
+        <div class="section">
+          <h1 id="about">About</h1>
+          <p>Colorado has a large running community. It is daunting to navigate all the meetups and events.</p>
+          <p>Colorado Runners aggregates running groups, stores, etc. for convenience. Hoping to help grow the community.</p>
+        </div>
+      </div>
       <% events_by_city.each do |city, events_by_dates| %>
-        <h1 id="<%= city.to_s.downcase %>"><%= city %></h1>
-          <% events_by_dates.each do |date, events| %>
-            <h2><%= date %></h2>
-            <% events.each do |event| %>
-              <h3><a href="<%= event[:link] %>" title="<%= event[:title] %>" target="_blank" rel="noopener"><%= event[:title] %></a></h3>
-              <p>Start: <%= event[:date] %></p>
-              <% if event[:location] %>
-                <p>Location: <a href="https://www.google.com/maps?q=<%= URI.escape(event[:location]) %>" target="_blank" rel="noopener"><%= event[:location] %></a></p>
-              <% end %>
-              <%= Kramdown::Document.new(event[:description] || '').to_html %>
+        <div class="card fluid">
+          <div class="section">
+            <h1 id="<%= city.to_s.downcase %>"><%= city %></h1>
+            <% if events_by_dates.length.zero? %>
+              <p>There are currently no events scheduled in this area.</p>
             <% end %>
+          </div>
+          <% events_by_dates.each do |date, events| %>
+            <div class="section">
+              <h2><%= date %></h2>
+            </div>
+            <div class="section">
+              <% events.each do |event| %>
+                <h3><a href="<%= event[:link] %>" title="<%= event[:title] %>" target="_blank" rel="noopener"><%= event[:title] %></a></h3>
+                <p>Start: <%= event[:date].strftime("%I:%M %p") %></p>
+                <% if event[:location] %>
+                  <p>Location: <a href="https://www.google.com/maps?q=<%= URI.escape(event[:location]) %>" target="_blank" rel="noopener"><%= event[:location] %></a></p>
+                <% end %>
+                <%= Kramdown::Document.new(event[:description] || '').to_html %>
+              <% end %>
+            </div>
           <% end %>
+        </div>
       <% end %>
     </div>
   </div>
+  <footer class="row">
+    <p>
+      &copy;<%= Time.now.year %> Running Clubs |
+      <a class="button" target="_blank" href="https://github.com/jtarchie/running-clubs">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height: 20px; vertical-align: text-top;"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+        Github
+      </a>
+    </p>
+  </footer>
 </body>
 </html>
