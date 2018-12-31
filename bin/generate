@@ -118,7 +118,8 @@ __END__
               <p>There are currently no events scheduled in this area.</p>
             <% end %>
           </div>
-          <% events_by_dates.each do |date, events| %>
+          <% events_by_dates.keys.sort.each do |date| %>
+            <% events = events_by_dates[date] %>
             <div class="section">
               <h2><%= date %></h2>
             </div>
@@ -146,5 +147,15 @@ __END__
       </a>
     </p>
   </footer>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112531804-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-112531804-1');
+  </script>
+
 </body>
 </html>
