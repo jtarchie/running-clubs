@@ -43,6 +43,7 @@ groups_by_city = {
     Group.new('Dirty30Running', 'Dirty 30 Running'),
     Group.new('RunnersRoostCO', 'Runners Roost'),
     Group.new('RunnersRoostLakewood', 'Runners Roost Lakewood'),
+    Group.new('1052961164748398', 'FRXC  - Front Range Cross Country'),
     Group.new('lookoutmountainrunners', 'Golden Mountain Runners')
   ],
   Boulder: [
