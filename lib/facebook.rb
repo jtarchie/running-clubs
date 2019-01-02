@@ -68,22 +68,32 @@ class Facebook
     payload
   end
 
+  Event = Struct.new(
+    :timestamp,
+    :title,
+    :description,
+    :location,
+    :link,
+    :group,
+    keyword_init: true
+  )
+
   def event(link:)
     logger.info "visiting event site #{link}"
     file = File.join('/tmp', [Digest::MD5.hexdigest(link), Time.now.to_date.to_s].join('-'))
     return Marshal.load(File.read(file)) if @cache && File.exist?(file)
 
     visit link
-    date = begin
+    timestamp = begin
              time = page.find('#event_time_info div[content]').text
              time = time.split(',')[1..-1].join(' ') if time.include?(',')
              time = time.split(/[–-]/)[0]
 
              Chronic.parse(time)
-           rescue StandardError => e
-             logger.error e.inspect
-             logger.info 'could not find a date'
-             nil
+                rescue StandardError => e
+                  logger.error e.inspect
+                  logger.info 'could not find a timestamp'
+                  nil
            end
     title = begin
               page.find('#title_subtitle [data-testid*="event-permalink-event-name"]').text
@@ -106,13 +116,13 @@ class Facebook
                  logger.error 'could not find a location'
                  nil
                end
-    payload = {
-      date: date,
+    payload = Event.new(
+      timestamp: timestamp,
       title: title,
       description: description,
       location: location,
       link: link
-    }
+    )
     File.write(file, Marshal.dump(payload))
     payload
   end
