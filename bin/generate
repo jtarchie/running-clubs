@@ -64,7 +64,7 @@ groups_by_city = {
 
 output_dir = options[:output_dir]
 system("rm -Rf #{output_dir} && mkdir -p #{output_dir}")
-system("cp assets/colorado.svg #{output_dir}")
+system("cp assets/* #{output_dir}")
 
 cutoff_time = Time.now + 30 * 24 * 3600
 
@@ -96,16 +96,18 @@ end
 __END__
 <html>
 <head>
-  <link rel="shortcut icon" href="/colorado.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta property="og:description" content="Colorado Runners aggregates running groups, stores, etc. for convenience. Hoping to help grow the community.">
+  <meta property="og:image" content="http://denverruners.com/colorado.svg">
   <meta property="og:title" content="Colorado Running Clubs">
   <meta property="og:url" content="https://denverrunners.com">
   <title>Colorado Running Clubs</title>
   <style>
     .icon-co {
-    background-image: url(/colorado.svg);
+      background-image: url(/colorado.svg);
+      background-repeat: no-repeat;
     }
   </style>
 </head>
