@@ -27,7 +27,7 @@ facebook = Facebook.new(
 
 facebook.login!
 
-City  = Struct.new(:name) do
+City = Struct.new(:name) do
   def to_s
     name
   end
@@ -38,7 +38,7 @@ City  = Struct.new(:name) do
 end
 Group = Struct.new(:id, :name)
 groups_by_city = {
-  City.new("Denver") => [
+  City.new('Denver') => [
     Group.new('112582942107236', 'Foothills Running and Cycling Club'),
     Group.new('124886367564642', 'Highland Tap and Burger Run Club'),
     Group.new('1528173973929011', 'Runners Roost Stapleton'),
@@ -54,17 +54,17 @@ groups_by_city = {
     Group.new('1052961164748398', 'FRXC  - Front Range Cross Country'),
     Group.new('lookoutmountainrunners', 'Golden Mountain Runners')
   ],
-  City.new("Boulder") => [
+  City.new('Boulder') => [
     Group.new('BoulderRunningCompany', 'Boulder Running Company')
   ],
-  City.new("Fort Collins") => [
+  City.new('Fort Collins') => [
     Group.new('416963631832940', 'Fort Collins Trail Runners')
   ]
 }
 
 output_dir = options[:output_dir]
 system("rm -Rf #{output_dir} && mkdir -p #{output_dir}")
-system("cp assets/favicon.ico #{output_dir}")
+system("cp assets/colorado.svg #{output_dir}")
 
 cutoff_time = Time.now + 30 * 24 * 3600
 
@@ -96,13 +96,16 @@ end
 __END__
 <html>
 <head>
-  <title>Colorado Running Clubs</title>
+  <link rel="shortcut icon" href="/colorado.svg">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="/favicon.ico">
+  <meta property="og:description" content="Colorado Runners aggregates running groups, stores, etc. for convenience. Hoping to help grow the community.">
+  <meta property="og:title" content="Colorado Running Clubs">
+  <meta property="og:url" content="https://denverrunners.com">
+  <title>Colorado Running Clubs</title>
   <style>
     .icon-co {
-      background-image: url(/favicon.ico);
+    background-image: url(/colorado.svg);
     }
   </style>
 </head>
