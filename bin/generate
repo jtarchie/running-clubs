@@ -59,9 +59,9 @@ groups_by_city = {
   City.new('Boulder') => [
     Group.new('BoulderRunningCompany', 'Boulder Running Company')
   ],
-  City.new('Fort Collins') => [
-    Group.new('416963631832940', 'Fort Collins Trail Runners')
-  ]
+  # City.new('Fort Collins') => [
+  #   Group.new('416963631832940', 'Fort Collins Trail Runners')
+  # ]
 }
 
 output_dir = options[:output_dir]
