@@ -1,0 +1,54 @@
+<html>
+<head>
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:description" content="Colorado Runners aggregates running groups, stores, etc. for convenience. Hoping to help grow the community.">
+  <meta property="og:image" content="http://denverruners.com/colorado.svg">
+  <meta property="og:title" content="Colorado Running Clubs">
+  <meta property="og:url" content="https://denverrunners.com">
+  <title>Colorado Running Clubs</title>
+  <style>
+    .icon-co {
+      background-image: url(/colorado.svg);
+      background-repeat: no-repeat;
+    }
+  </style>
+</head>
+<body>
+  <header class="row">
+    <a href="/" class="button logo"><span class="icon-co"></span>Running Clubs</a>
+    <a href="#about" class="button">About</a>
+    <% @events_by_city.each do |city, _| %>
+    <a href="#<%= city.slug %>" class="button"><%= city.to_s %></a>
+    <% end %>
+    <a href="mailto:jtarchie+runningclubs@gmail.com" class="button">Contact</a>
+  </header>
+  <div class="container">
+    <div class="col-sm-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+      <%= yield %>
+    </div>
+  </div>
+  <footer class="row">
+    <p>
+      &copy;<%= Time.now.year %> Running Clubs |
+      <a class="button" target="_blank" href="https://github.com/jtarchie/running-clubs">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height: 20px; vertical-align: text-top;"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+        Github
+      </a>
+      <a class="button" target="_blank" href="privacy.html">
+        Privacy Policy
+      </a>
+    </p>
+  </footer>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112531804-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-112531804-1');
+  </script>
+</body>
+</html>

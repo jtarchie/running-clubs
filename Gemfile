@@ -10,5 +10,6 @@ gem 'launchy'
 gem 'rspec'
 gem 'rubocop'
 gem 'selenium-webdriver'
+gem 'tilt'
 
 ruby '~> 2.5.0'
