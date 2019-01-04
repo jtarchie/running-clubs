@@ -10,6 +10,5 @@ gem 'launchy'
 gem 'rspec'
 gem 'rubocop'
 gem 'selenium-webdriver'
-gem 'toml'
 
 ruby '~> 2.5.0'

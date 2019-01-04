@@ -2,10 +2,9 @@
 # frozen_string_literal: true
 
 require 'erb'
+require 'kramdown'
 require 'optparse'
 require 'uri'
-require 'toml'
-require 'kramdown'
 require_relative '../lib/facebook'
 
 options = {}
@@ -28,9 +27,18 @@ facebook = Facebook.new(
 
 facebook.login!
 
+City  = Struct.new(:name) do
+  def to_s
+    name
+  end
+
+  def slug
+    name.downcase.gsub(/\W/, '')
+  end
+end
 Group = Struct.new(:id, :name)
 groups_by_city = {
-  Denver: [
+  City.new("Denver") => [
     Group.new('112582942107236', 'Foothills Running and Cycling Club'),
     Group.new('124886367564642', 'Highland Tap and Burger Run Club'),
     Group.new('1528173973929011', 'Runners Roost Stapleton'),
@@ -46,8 +54,11 @@ groups_by_city = {
     Group.new('1052961164748398', 'FRXC  - Front Range Cross Country'),
     Group.new('lookoutmountainrunners', 'Golden Mountain Runners')
   ],
-  Boulder: [
+  City.new("Boulder") => [
     Group.new('BoulderRunningCompany', 'Boulder Running Company')
+  ],
+  City.new("Fort Collins") => [
+    Group.new('416963631832940', 'Fort Collins Trail Runners')
   ]
 }
 
@@ -100,7 +111,7 @@ __END__
     <a href="/" class="button logo"><span class="icon-co"></span>Running Clubs</a>
     <a href="#about" class="button">About</a>
     <% events_by_city.each do |city, _| %>
-    <a href="#<%= city.to_s.downcase %>" class="button"><%= city %></a>
+    <a href="#<%= city.slug %>" class="button"><%= city.to_s %></a>
     <% end %>
     <a href="mailto:jtarchie+runningclubs@gmail.com" class="button">Contact</a>
   </header>
@@ -116,7 +127,7 @@ __END__
       <% events_by_city.each do |city, events_by_dates| %>
         <div class="card fluid">
           <div class="section">
-            <h1 id="<%= city.to_s.downcase %>"><%= city %></h1>
+          <h1 id="<%= city.slug %>"><%= city.to_s %></h1>
             <% if events_by_dates.length.zero? %>
               <p>There are currently no events scheduled in this area.</p>
             <% end %>
