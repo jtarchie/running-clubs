@@ -79,7 +79,7 @@ Dir.chdir(output_dir) do
         event.group = group
       end
     end.group_by do |event|
-      event.timestamp.to_date.to_s
+      event.timestamp.to_date
     end
     [city, events_by_date]
   end.to_h
