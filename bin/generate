@@ -84,8 +84,8 @@ Dir.chdir(output_dir) do
     [city, events_by_date]
   end.to_h
 
-  page = Tilt.new(File.join(__dir__, '..', 'templates/page.erb'))
-  File.write('index.html', page.render(self) { Tilt.new(File.join(__dir__, '..', 'templates/city.erb')).render(self) })
+  page = Tilt.new(File.join(__dir__, '..', 'templates/page.html.erb'))
+  File.write('index.html', page.render(self) { Tilt.new(File.join(__dir__, '..', 'templates/city.html.erb')).render(self) })
   File.write('privacy.html', page.render(self) { Tilt.new(File.join(__dir__, '..', 'templates/privacy.md')).render(self) })
   File.write('CNAME', 'denverrunners.com')
 
