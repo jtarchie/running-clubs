@@ -41,7 +41,6 @@ Group = Struct.new(:id, :name)
 
 groups_by_city = {
   City.new('Denver') => [
-    Group.new('112582942107236', 'Foothills Running and Cycling Club'),
     Group.new('124886367564642', 'Highland Tap and Burger Run Club'),
     Group.new('1528173973929011', 'Runners Roost Stapleton'),
     Group.new('1743154215930862', 'Arvada Runners'),
