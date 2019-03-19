@@ -42,10 +42,9 @@ Group = Struct.new(:id, :name)
 groups_by_city = {
   City.new('Denver') => [
     Group.new('124886367564642', 'Highland Tap and Burger Run Club'),
-    Group.new('1528173973929011', 'Runners Roost Stapleton'),
+    Group.new('1758341297531454', 'Runners Roost Stapleton'),
     Group.new('1743154215930862', 'Arvada Runners'),
     Group.new('201896876473', 'Boulder Running Company @ Greenwood Village'),
-    Group.new('305158679071', 'Runners Roost Lone Tree'),
     Group.new('338344882975485', 'Boulder Running Company @ Cherry Creek'),
     Group.new('918204988192108', 'Denver Trail Runners'),
     Group.new('BPRunCO', 'Berkeley Park Running Company'),
@@ -57,7 +56,7 @@ groups_by_city = {
   ],
   City.new('Boulder') => [
     Group.new('BoulderRunningCompany', 'Boulder Running Company')
-  ],
+  ]
   # City.new('Fort Collins') => [
   #   Group.new('416963631832940', 'Fort Collins Trail Runners')
   # ]
