@@ -2,3 +2,4 @@
 cookies.txt
 .tern-port
 *.html
+id_rsa*
