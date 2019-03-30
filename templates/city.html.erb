@@ -19,7 +19,7 @@
         <h2><%= date.strftime('%A, %B %d, %Y') %></h2>
       </div>
       <div class="section">
-        <% events.each do |event| %>
+	      <% events.sort_by(&:timestamp).each do |event| %>
           <h3>
             <a href="<%= event.link %>" title="<%= event.title %>" target="_blank" rel="noopener"><%= event.title %></a>
             <small>
